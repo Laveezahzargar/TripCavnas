@@ -10,67 +10,117 @@ interface Trip {
 }
 
 function MyTrips() {
+
     const navigate = useNavigate();
 
-    const [trips, setTrips] = useState<Trip[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [trips, setTrips] =
+        useState<Trip[]>([]);
 
-    const [tripName, setTripName] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [loading, setLoading] =
+        useState(true);
 
-    useEffect(() => {
-        fetchTrips();
-    }, []);
+    const [tripName, setTripName] =
+        useState("");
+
+    const [startDate, setStartDate] =
+        useState("");
+
+    const [endDate, setEndDate] =
+        useState("");
 
     const fetchTrips = async () => {
+
         try {
-            const response = await api.get("/trips");
+
+            const response =
+                await api.get("/trips");
 
             setTrips(response.data);
+
         } catch (error) {
+
             console.error(error);
-        } finally {
-            setLoading(false);
         }
     };
 
+    useEffect(() => {
+
+        const initialize = async () => {
+
+            try {
+
+                await fetchTrips();
+
+            } finally {
+
+                setLoading(false);
+            }
+        };
+
+        initialize();
+
+    }, []);
+
     const addTrip = async () => {
+
         try {
-            await api.post("/trips", {
-                tripName,
-                startDate,
-                endDate,
-            });
+
+            await api.post(
+                "/trips",
+                {
+                    tripName,
+                    startDate,
+                    endDate
+                }
+            );
 
             setTripName("");
             setStartDate("");
             setEndDate("");
 
-            fetchTrips();
+            await fetchTrips();
+
         } catch (error) {
+
             console.error(error);
         }
     };
 
-    const deleteTrip = async (tripId: number) => {
-        if (!window.confirm("Delete trip?")) {
+    const deleteTrip = async (
+        tripId: number
+    ) => {
+
+        if (
+            !window.confirm(
+                "Delete trip?"
+            )
+        ) {
             return;
         }
 
         try {
-            await api.delete(`/trips/${tripId}`);
 
-            fetchTrips();
+            await api.delete(
+                `/trips/${tripId}`
+            );
+
+            await fetchTrips();
+
         } catch (error) {
+
             console.error(error);
         }
     };
 
     if (loading) {
+
         return (
             <div className="page-container text-center">
-                <div className="spinner-border"></div>
+
+                <div
+                    className="spinner-border"
+                ></div>
+
             </div>
         );
     }
