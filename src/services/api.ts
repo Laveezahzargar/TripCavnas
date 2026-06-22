@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://localhost:7000/api",
+    baseURL: "https://tripcanvas-backend-kab6.onrender.com/",
     headers: {
         "Content-Type": "application/json"
     }
@@ -19,3 +19,6 @@ api.interceptors.request.use((config) => {
 });
 
 export default api;
+
+
+//https:||localhost:7000/api
